@@ -25,7 +25,8 @@ class Form : public QWidget
     Q_OBJECT
 
 public:
-    explicit Form(bool HardMode, QWidget *parent = nullptr);
+
+    explicit Form(bool HardMode=true, QWidget *parent = nullptr);
     ~Form();
 public slots:
 
@@ -48,6 +49,10 @@ private:
     QVBoxLayout* layout;
     QTimer* timer;
     QString WayTo;
+
+    FRIEND_TEST(Form,SettertGetters);//this test if friend for this class
+    FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class
+    FRIEND_TEST(Form,MoveCells);//this test if friend for this class
 };
 
 #endif // FORM_H

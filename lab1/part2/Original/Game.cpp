@@ -67,7 +67,7 @@ Game::Game(QString s, QWidget*)
     //set empty cell
     do
         path.setY(rand() % 4);
-    while(n%2 != path.y()%2);
+    while(0 != path.y()%2);
 
     path.setX(rand() % 4);
 

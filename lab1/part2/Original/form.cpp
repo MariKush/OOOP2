@@ -106,7 +106,6 @@ void Form::on_NewGame_clicked()
     //installing a hint (original photo) for easy mode
     if (!hardMode)
     {
-        qDebug()<<WayTo;
         QPixmap img(WayTo+"0.jpg");
 
         img=img.scaled(600,600);
@@ -146,10 +145,17 @@ void Form::on_ExitGame_clicked()
 void Form::on_CnangePhoto_clicked()
 {
     //opens a folder with pictures
-    QString FileName =QFileDialog::getOpenFileName(this, tr("Open File"),"C:/Users/Dell-admin/Desktop/pictures","*.jpg");
+    QDir dir=QDir::current();
+    dir.cdUp();
+    dir.cd("pictures");
+    QString FileName =QFileDialog::getOpenFileName(this, tr("Open File"),dir.absolutePath(),"*.png");
     if (FileName.isEmpty())return;
 
+
+    qDebug()<<FileName;
+
     QImage* original=new QImage(FileName);
+    qDebug()<<original->isNull();
     FileName=FileName.right(FileName.length()-FileName.lastIndexOf(QChar('/'))-1);
     FileName=FileName.left(FileName.lastIndexOf(QChar('.')));
 
@@ -163,7 +169,6 @@ void Form::on_CnangePhoto_clicked()
     QDir(game->FileDir).mkdir(FileName);
     WayTo=game->FileDir+FileName+"/";
     SquareImage->save(WayTo+"0.jpg");
-
     int LSSize=min/4;//LittleSquareSize
 
     //creating 15 small photos and save their

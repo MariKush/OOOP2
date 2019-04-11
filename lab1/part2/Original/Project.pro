@@ -24,6 +24,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+INCLUDEPATH +="Test/googletest/googletest/include"
+INCLUDEPATH +="Test/googletest/googlemock/include"
+INCLUDEPATH +="Test/googletest/googletest"
+INCLUDEPATH +="Test/googletest/googlemock"
 
 SOURCES += \
         main.cpp\

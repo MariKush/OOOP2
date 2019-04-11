@@ -14,6 +14,8 @@
 #include <QList>
 #include <QWidget>
 #include <QDebug>
+
+#include <gtest/gtest.h>
 class QGridLayout;
 class QPoint;
 class QPushButton;
@@ -38,7 +40,8 @@ private:
     QPoint path;//empty cell
     QPixmap *px[15];//for showing images on screen
     void checkGameOver();
-
+    FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class
+    FRIEND_TEST(Form,MoveCells);//this test if friend for this class
 public slots:
     void move();
 };
