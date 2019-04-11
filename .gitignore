@@ -434,6 +434,10 @@ ASALocalRun/
 
 # End of https://www.gitignore.io/api/qt,c++,qtcreator,visualstudio
 
-# Visual Paradigm
-**/*.vpp*
-
+#visual paradigm
+.*vpp.*
+*.vpp*
+!*.vpp
+*.lock
+tmp/
+.vpprefdata
