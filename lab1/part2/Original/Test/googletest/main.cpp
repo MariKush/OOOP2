@@ -7,8 +7,8 @@
 
 TEST(Form, SettertGetters) {
   Form f;
-  //EXPECT_TRUE(f.game);//<<"not create game in form";
-  //EXPECT_EQ(f.game->countMoves, 0)<<"count moves not equel 0";
+  EXPECT_TRUE(f.game);//<<"not create game in form";
+  EXPECT_EQ(f.game->countMoves, 0)<<"count moves not equel 0";
 
 }
 

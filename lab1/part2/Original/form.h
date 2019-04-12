@@ -47,7 +47,7 @@ private:
     QHBoxLayout* settingsLayout;
     QHBoxLayout* photoLayout;
     QVBoxLayout* layout;
-    QTimer* timer;
+    //QTimer* timer;
     QString WayTo;
 
     FRIEND_TEST(Form,SettertGetters);//this test if friend for this class
