@@ -186,9 +186,7 @@ void Game::ChangePhoto(QString s)
 {
     for(int i=0;i<15;i++)
     {
-
         px[i]=new QPixmap(s+QString::number(i+1)+".jpg");
-
     }
 }
 
