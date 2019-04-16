@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>History</class>
+ <widget class="QDialog" name="History">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>391</width>
+    <height>239</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>20</y>
+     <width>271</width>
+     <height>171</height>
+    </rect>
+   </property>
+   <row>
+    <property name="text">
+     <string>1</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>2</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>3</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>4</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>5</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>Імя</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Час</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Кількість кроів</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QRadioButton" name="sort_by_time_radiobtn">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>200</y>
+     <width>63</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>By time</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="sort_by_step_radiobtn">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>220</y>
+     <width>63</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>By count step</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
