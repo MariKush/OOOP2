@@ -28,7 +28,7 @@ class Form : public QWidget
 
 public:
 
-    explicit Form(bool HardMode=true, QWidget *parent = nullptr);
+    explicit Form(bool HardMode=true, int width=4, QWidget *parent = nullptr);
     QTime getTime();
     QString getHard();
     void vin_game();
@@ -53,6 +53,7 @@ private:
     Ui::Form *ui;
     Game* game;
     bool hardMode;
+    int width;
     QHBoxLayout* settingsLayout;
     QHBoxLayout* photoLayout;
     QVBoxLayout* layout;
@@ -63,6 +64,7 @@ private:
 
     void keyPressEvent(QKeyEvent *e);
     bool eventFilter(QObject *obj,QEvent *event);
+    void change_photo(QString filename);
 
     FRIEND_TEST(Form,SettertGetters);//this test if friend for this class
     FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class

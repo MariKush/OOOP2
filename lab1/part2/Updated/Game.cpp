@@ -25,9 +25,11 @@
            QWidget
     @return -
 */
-Game::Game(QString s, QWidget* parent)
+Game::Game(QString s, int width, QWidget* parent)
 {
+
     this->setParent(parent);
+    this->width=width;
     grid = new QGridLayout(this);
     grid->setHorizontalSpacing(1);
     grid->setVerticalSpacing(1);
@@ -37,25 +39,27 @@ Game::Game(QString s, QWidget* parent)
     FileDir=QDir::currentPath();
     FileDir=FileDir.left(FileDir.lastIndexOf(QChar('/')))+"/pictures/";
 
+    int count_btns=width*width-1;
     // pictures
+    px=new QPixmap*[count_btns];
     ChangePhoto(s);
-
     int n;
+
     do
     {
         numbers.clear();
         //random field filling
-        for(int i = 0; i < 15; i++)
+        for(int i = 0; i < count_btns; i++)
         {
             do
-                n = rand() % 15 + 1;
+                n = rand() % count_btns + 1;
             while(numbers.contains(n));
             numbers << n;
         }
         n = 0;
 
         //check (is possibly make it?)
-        for(int i = 2; i <= 15; i++)
+        for(int i = 2; i <= count_btns; i++)
             for(int j = 0; j < numbers.indexOf(i); j++)
             {
                 if(numbers[j] < i)
@@ -69,17 +73,17 @@ Game::Game(QString s, QWidget* parent)
 
     //set empty cell
     do
-        path.setY(rand() % 4);
+        path.setY(rand() % width);
     while(0 != path.y()%2);
 
-    path.setX(rand() % 4);
+    path.setX(rand() % width);
 
 
     n = 0;
 
     //creale all buttons
-    for(int y = 0; y < 4; ++y) // line
-        for(int x = 0; x < 4; ++x) // column
+    for(int y = 0; y < width; ++y) // line
+        for(int x = 0; x < width; ++x) // column
         {
             //current cell must be empty
             if(path.x() == x && path.y() == y)
@@ -105,11 +109,11 @@ void Game::createButton(QPushButton* b, int nom, int x, int y) // Create a butto
         btn = new QPushButton();
         buttons << btn;
         connect(btn, SIGNAL(clicked()), this, SLOT(move()));
-        btn->setFixedSize(150,150);
+        btn->setFixedSize(600/width,600/width);
 
         QIcon ButtonIcon(*px[nom-1]);
         btn->setIcon(ButtonIcon);
-        btn->setIconSize(QSize(150,150));
+        btn->setIconSize(QSize(600/width,600/width));
 
     }
     grid->addWidget(btn, y, x);
@@ -188,7 +192,7 @@ void Game::checkGameOver()
 {
     int i=1, n=0;
 
-    for(int y = 0; y > grid->rowCount(); ++y) // line
+    for(int y = 0; y < grid->rowCount(); ++y) // line
     {
         for(int x = 0; x < grid->columnCount(); ++x) // column
         {
@@ -238,7 +242,8 @@ QString Game::get_filename()
 */
 void Game::ChangePhoto(QString s)
 {
-    for(int i=0;i<15;i++)
+    int count=width*width-1;
+    for(int i=0;i<count;i++)
     {
         px[i]=new QPixmap(s+QString::number(i+1)+".jpg");
     }

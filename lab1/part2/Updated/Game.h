@@ -25,7 +25,7 @@ class Game : public QWidget
 {
     Q_OBJECT
 public:
-    Game(QString s, QWidget* parent = nullptr);
+    Game(QString s, int width, QWidget* parent = nullptr);
     void createButton(QPushButton*, int, int, int);
     void ChangePhoto(QString s);
     void rewrite_score_file(QString filename);
@@ -39,12 +39,12 @@ signals:
     void click();
 
 private:
-    int width=4;
+    int width;
     QList<QPushButton*> buttons;
     QList<int> numbers;
     QGridLayout* grid;
     QPoint path;//empty cell
-    QPixmap *px[15];//for showing images on screen
+    QPixmap **px;//for showing images on screen
     void checkGameOver();
     QString get_filename();
     FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class

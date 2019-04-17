@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QTableWidgetItem>
 #include <QDebug>
+#include <QTime>
 
 const QString wayTo="filename.txt";
 
@@ -15,7 +16,8 @@ History::History(QString filename, QWidget *parent) :
     this->setLayout(ui->Main_VLayout);
 
     set_text(filename);
-
+    on_sort_by_step_radiobtn_clicked();
+    this->setFixedSize(this->size());
 }
 
 History::~History()
@@ -40,4 +42,40 @@ void History::set_text(QString filename)
     }
 
     f1.close();
+}
+
+void History::swap_raw(int r1, int r2)
+{
+    for (int i=0;i<3;i++)
+    {//swap(ui->tableWidget->item(r1, i), ui->tableWidget->item(r2, i))
+        QString txt=ui->tableWidget->item(r1, i)->text();
+        ui->tableWidget->item(r1, i)->setText(ui->tableWidget->item(r2, i)->text());
+        ui->tableWidget->item(r2, i)->setText(txt);
+    }
+
+
+}
+
+void History::on_sort_by_time_radiobtn_clicked()
+{
+    for(int i=0;i<5;i++)
+        for (int j=0;j<4;j++)
+        {
+            if (QTime::fromString( ui->tableWidget->item(j, 1)->text())>QTime::fromString( ui->tableWidget->item(j+1, 1)->text())||ui->tableWidget->item(j, 1)->text().isEmpty())
+            {
+                swap_raw(j,j+1);
+            }
+        }
+}
+
+void History::on_sort_by_step_radiobtn_clicked()
+{
+    for(int i=0;i<5;i++)
+        for (int j=0;j<4;j++)
+        {
+            if (ui->tableWidget->item(j, 2)->text().toInt() > ui->tableWidget->item(j+1, 2)->text().toInt()||ui->tableWidget->item(j, 1)->text().isEmpty())
+            {
+                swap_raw(j,j+1);
+            }
+        }
 }

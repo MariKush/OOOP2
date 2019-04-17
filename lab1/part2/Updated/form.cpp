@@ -23,7 +23,7 @@
     @param bool HardMode - for set hard mode
     @return -
 */
-Form::Form(bool HardMode, QWidget *parent):
+Form::Form(bool HardMode, int width, QWidget *parent):
     QWidget(parent),
     ui(new Ui::Form),
     game(nullptr)
@@ -31,13 +31,7 @@ Form::Form(bool HardMode, QWidget *parent):
     ui->setupUi(this);
 
     this->hardMode=HardMode;
-
-    //set the default image
-    QDir dir=QDir::current();
-    dir.cdUp();
-    dir.cd("pictures");
-    dir.cd("autumn");
-    WayTo=dir.absolutePath()+"/";
+    this->width=width;
 
     layout = new QVBoxLayout(this);
     settingsLayout = new QHBoxLayout;
@@ -53,7 +47,20 @@ Form::Form(bool HardMode, QWidget *parent):
     timer=new QTimer;
     timer->start(100);
 
-    on_NewGame_clicked();
+
+    //set the default image
+    QDir dir=QDir::current();
+    dir.cdUp();
+    dir.cd("pictures");
+    while (!dir.cd("autumn"+QString::number(width)))
+    {
+        dir.mkdir("autumn"+QString::number(width));
+    }
+    WayTo=dir.absolutePath()+"/";
+    change_photo(WayTo.left(WayTo.left(WayTo.length()-1).lastIndexOf('/')+1)+"autumn.png");
+
+
+
     //fixing the size of the field
     //this->setFixedSize(this->size());
 
@@ -136,7 +143,9 @@ bool Form::eventFilter(QObject *obj,QEvent *event)
         result = QObject::eventFilter(obj, event);
 
     return result;
-}//eventFilter
+}
+
+//eventFilter
 
 void Form::vin_game()
 {
@@ -149,7 +158,6 @@ void Form::keyPressEvent(QKeyEvent *e)
     if(e->key()==Qt::Key_Right)game->click_button(Qt::Key_Right);
     if(e->key()==Qt::Key_Up)game->click_button(Qt::Key_Up);
     if(e->key()==Qt::Key_Down)game->click_button(Qt::Key_Down);
-
 }
 
 /*
@@ -175,12 +183,16 @@ void Form::on_NewGame_clicked()
     }
 
     //draw a new field
-    game = new Game(WayTo, this);
+    game = new Game(WayTo, width, this);
+    qDebug()<<4;
     this->setFocus();
-    connect(this->game, SIGNAL(Smove()), this, SLOT(update_count_of_moves()));
-    connect(this->game, SIGNAL(click()), this, SLOT(set_focus()));
+    connect(game, SIGNAL(Smove()), this, SLOT(update_count_of_moves()));
+    connect(game, SIGNAL(click()), this, SLOT(set_focus()));
     update_count_of_moves();
+
+
     photoLayout->addWidget(game);
+
 
     //installing a hint (original photo) for easy mode
     if (!hardMode)
@@ -192,8 +204,10 @@ void Form::on_NewGame_clicked()
 
         photoLayout->addWidget(ui->originalPhoto);
     }
+
     layout->addLayout(photoLayout);
     counter=new QHBoxLayout;
+
     counter->addWidget(ui->countMoves);
     counter->addWidget(ui->countTime);
     ui->countTime->setText("Time: 00:00:00");
@@ -238,34 +252,44 @@ void Form::on_CnangePhoto_clicked()
     QString FileName =QFileDialog::getOpenFileName(this, tr("Open File"),dir.absolutePath(),"*.png");
     if (FileName.isEmpty())return;
 
+    change_photo(FileName);
 
-    qDebug()<<FileName;
+}
 
+void Form::change_photo(QString FileName)
+{
     QImage* original=new QImage(FileName);
-    qDebug()<<original->isNull();
-    FileName=FileName.right(FileName.length()-FileName.lastIndexOf(QChar('/'))-1);
-    FileName=FileName.left(FileName.lastIndexOf(QChar('.')));
 
     int min=qMin(original->width(), original->height());
-    min=min-min%4;//make kratne 4
+    min=min-min%width;//make kratne width
 
     QImage* SquareImage=new QImage;
     *SquareImage=original->copy(0, 0,min,min);
     delete original;
 
-    QDir(game->FileDir).mkdir(FileName);
-    WayTo=game->FileDir+FileName+"/";
-    SquareImage->save(WayTo+"0.jpg");
-    int LSSize=min/4;//LittleSquareSize
+    QDir dir=QDir::current();
+    dir.cdUp();
+    dir.cd("pictures");
+    FileName=FileName.left(FileName.lastIndexOf('.'));
+    FileName=FileName.right(FileName.length()-FileName.lastIndexOf('/')-1);
+    while (!dir.cd(FileName+QString::number(width)))
+    {
+        dir.mkdir(FileName+QString::number(width));
+    }
+    WayTo=dir.absolutePath()+"/";
 
-    //creating 15 small photos and save their
-    for (int i=1;i<16;i++)
+    qDebug()<<WayTo;
+
+    SquareImage->save(WayTo+"0.jpg");
+    int LSSize=min/width;//LittleSquareSize
+
+    int count_squares=width*width;
+    //creating width*width small photos and save their
+    for (int i=1;i<count_squares;i++)
     {
         QImage* LittleSquare=new QImage;
-        *LittleSquare=SquareImage->copy(((i-1)%4)*LSSize, (i-1)/4*LSSize, LSSize, LSSize);
+        *LittleSquare=SquareImage->copy(((i-1)%width)*LSSize, (i-1)/width*LSSize, LSSize, LSSize);
         LittleSquare->save(WayTo+QString::number(i)+".jpg");
     }
-
     on_NewGame_clicked();
-
 }

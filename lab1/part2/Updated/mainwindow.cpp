@@ -37,7 +37,7 @@ void MainWindow::on_pushButton_exit_clicked()
 
 void MainWindow::on_pushButton_start_clicked()
 {
-    Form *f = new Form(ui->HardMode->checkState());
+    Form *f = new Form(ui->HardMode->checkState(), ui->width_spinbox->value());
     f->setFocus();
     f->show();
     this->close();
@@ -46,6 +46,11 @@ void MainWindow::on_pushButton_start_clicked()
 
 void MainWindow::on_pushButton_history_clicked()
 {
-   History *h=new History("Filename.txt");
-   h->show();
+    QString filename="filename";
+    if (ui->HardMode->isChecked())filename+="hard";
+    else filename+="nohard";
+    filename+=QString::number(ui->width_spinbox->value());
+    qDebug()<<filename;
+    History *h=new History(filename+".txt");
+    h->show();
 }
