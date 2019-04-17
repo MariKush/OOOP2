@@ -12,10 +12,11 @@ class History : public QDialog
     Q_OBJECT
 
 public:
-    explicit History(QWidget *parent = nullptr);
+    explicit History(QString filename, QWidget *parent = nullptr);
     ~History();
 
 private:
+    void set_text(QString filename);
     Ui::History *ui;
 };
 

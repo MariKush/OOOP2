@@ -29,6 +29,9 @@ class Form : public QWidget
 public:
 
     explicit Form(bool HardMode=true, QWidget *parent = nullptr);
+    QTime getTime();
+    QString getHard();
+    void vin_game();
     ~Form();
 public slots:
 

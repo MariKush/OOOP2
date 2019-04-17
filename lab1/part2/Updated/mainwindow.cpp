@@ -46,11 +46,6 @@ void MainWindow::on_pushButton_start_clicked()
 
 void MainWindow::on_pushButton_history_clicked()
 {
-    QMessageBox::information(this, "History",
-                             "The puzzle was invented by Noyes Palmer Chapman,"
-                             "a postmaster in Canastota, New York, who is said "
-                             "to have shown friends, as early as 1874, "
-                             "a precursor puzzle consisting of 16 numbered blocks "
-                             "that were to be put together in rows of four, each summing to 34."
-                             );
+   History *h=new History("Filename.txt");
+   h->show();
 }

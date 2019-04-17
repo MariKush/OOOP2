@@ -8,6 +8,7 @@
 */
 
 #include "Game.h"
+#include "form.h"
 #include "mainwindow.h"
 #include <QGridLayout>
 #include <QPoint>
@@ -15,6 +16,7 @@
 #include <QTime>
 #include "QMessageBox"
 #include <QDir>
+#include <QFile>
 #include <QInputDialog>
 
 /*
@@ -205,16 +207,27 @@ void Game::checkGameOver()
         // block all buttons
         for(QList<QPushButton*>::const_iterator it = buttons.begin(); it != buttons.end(); ++it)
             (*it)->setDisabled(true);
-        bool ok;
-        QString text;
-        do{
-             text= QInputDialog::getText(this, tr("QInputDialog::getText()"),
-                                                     tr("User name:"),QLineEdit::Normal,
-                                                     QDir::home().dirName(), &ok);
-        }while(!ok||text.isEmpty());
 
-        //QMessageBox::information(this, "message", "THE VICTORY!!!");
+        static_cast<Form*>(parent())->vin_game();
+
+        QMessageBox::information(this, "message", "THE VICTORY!!!");
+
+        QString filename=get_filename();
+        rewrite_score_file(filename);
+
+        History *h=new History(filename);
+        h->show();
+
+
     }
+}
+
+QString Game::get_filename()
+{
+    QString filename="filename";
+    filename+=static_cast<Form*>(parent())->getHard();
+    filename+=QString::number(width);
+    return filename+".txt";
 }
 
 /*
@@ -228,6 +241,102 @@ void Game::ChangePhoto(QString s)
     for(int i=0;i<15;i++)
     {
         px[i]=new QPixmap(s+QString::number(i+1)+".jpg");
+    }
+}
+
+void Game::rewrite_score_file(QString filename)
+{
+    int deleted_row=-1;
+    int min_count=countMoves;
+    QFile f1(filename);
+    bool b=false;
+    if (!f1.open(QFile::ReadWrite))//file dont exist
+    {
+        b=true;
+    }
+    else
+    {
+        QByteArray arr;
+        for (int var = 0; var < 5; var++) {
+            arr=f1.readLine();
+            qDebug()<<arr;
+            if (arr.isEmpty())
+            {
+                deleted_row=-1;
+                b=true;
+                var=5;
+                continue;
+            }
+            int count_moves;
+
+            count_moves=arr.right(arr.length()-10-8).left(arr.length()-10-8-2).toInt();
+            qDebug()<<count_moves;
+            if (min_count<count_moves)
+            {
+                min_count=count_moves;
+                deleted_row=var;
+                b=true;
+            }
+            arr.clear();
+        }
+
+    }
+    f1.close();
+
+    bool ok;
+    QString text;
+    if (b)
+    {
+        do{
+
+            text= QInputDialog::getText(this, tr("QInputDialog::getText()"),
+                                                     tr("User name:"),QLineEdit::Normal,
+                                                     QDir::home().dirName(), &ok);
+        }while(!ok||text.isEmpty());
+        text=text.left(10);
+        while (text.size()<10)text+=" ";
+        f1.open(QFile::ReadWrite);
+
+
+        if (deleted_row==-1)
+        {
+            while (f1.getChar(char())) {}
+            QByteArray put=text.toLatin1();
+            put+=static_cast<Form*>(parent())->getTime().toString();
+            qDebug()<<static_cast<Form*>(parent())->getTime();
+            put+=QString::number(countMoves).toLatin1();
+            put+="\r\n";
+            qDebug()<<put;
+            f1.write(put);
+        }
+        else
+        {
+
+            QString tmp="tmp.tmp";
+            QFile f2(tmp);
+            f2.open(QFile::WriteOnly);
+            for(int i=0;i<5;i++)
+            {
+                 QByteArray put=f1.readLine();
+                 if (i==deleted_row)
+                 {
+                     put=text.toLatin1();
+                     put+=static_cast<Form*>(parent())->getTime().toString();
+                     put+=QString::number(countMoves).toLatin1();
+                     put+="\r\n";
+                     qDebug()<<put;
+                     f2.write(put);
+                 }
+                 else {
+                     f2.write(put);
+                 }
+            }
+
+            f1.close();
+            QFile::remove(filename);
+            f2.rename(filename);
+            f2.close();
+        }
     }
 }
 

@@ -50,13 +50,15 @@ Form::Form(bool HardMode, QWidget *parent):
 
     layout->addLayout(settingsLayout);
 
+    timer=new QTimer;
+    timer->start(100);
+
     on_NewGame_clicked();
     //fixing the size of the field
     //this->setFixedSize(this->size());
 
-    timer=new QTimer;
-    timer->start(100);
-    connect(this->timer, SIGNAL(timeout()), this, SLOT(set_time()));
+
+
 
     setLayout(layout);
 }
@@ -93,6 +95,22 @@ void Form::set_time()
     ui->countTime->setText("Time: "+t.toString());
 }
 
+
+QTime Form::getTime()
+{
+    QTime t(0,0);
+    if (!time.isValid()) return t;
+    t=t.addMSecs(static_cast<int>(time.elapsed()));
+    return t;
+}
+
+QString Form::getHard()
+{
+    if (hardMode)return "hard";
+    else return "nohard";
+}
+
+
 //copy text from network. I dont understad how it work
 bool Form::eventFilter(QObject *obj,QEvent *event)
 {
@@ -119,6 +137,11 @@ bool Form::eventFilter(QObject *obj,QEvent *event)
 
     return result;
 }//eventFilter
+
+void Form::vin_game()
+{
+    disconnect(this->timer, SIGNAL(timeout()), this, SLOT(set_time()));
+}
 
 void Form::keyPressEvent(QKeyEvent *e)
 {
@@ -174,6 +197,7 @@ void Form::on_NewGame_clicked()
     counter->addWidget(ui->countMoves);
     counter->addWidget(ui->countTime);
     ui->countTime->setText("Time: 00:00:00");
+    connect(this->timer, SIGNAL(timeout()), this, SLOT(set_time()));
     layout->addLayout(counter);
     layout->update();
 
