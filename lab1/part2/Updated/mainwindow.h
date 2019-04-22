@@ -7,7 +7,7 @@
     Purpose: idescription of class MainWindow functions
     (initial game window)
     @author Mariia Kushnirenko
-    @version 08/12/18
+    @version 22/04/19
 */
 
 #include <QMainWindow>
@@ -30,7 +30,6 @@ private slots:
     void on_pushButton_history_clicked();
 
     void on_pushButton_exit_clicked();
-
 
 private:
     Ui::MainWindow *ui;

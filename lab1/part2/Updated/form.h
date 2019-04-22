@@ -7,7 +7,7 @@
     Purpose: idescription of class Form functions
     (for box with a gaming field)
     @author Mariia Kushnirenko
-    @version 08/12/18
+    @version 22/04/19
 */
 
 
@@ -31,7 +31,7 @@ public:
     explicit Form(bool HardMode=true, int width=4, QWidget *parent = nullptr);
     QTime getTime();
     QString getHard();
-    void vin_game();
+    void winGame();
     ~Form();
 public slots:
 
@@ -43,11 +43,9 @@ private slots:
 
     void on_CnangePhoto_clicked();
 
-    void update_count_of_moves();
+    void updateCountOfMoves();
 
-    void set_focus();
-
-    void set_time();
+    void setTime();
 
 private:
     Ui::Form *ui;
@@ -60,11 +58,11 @@ private:
     QHBoxLayout* counter;
     QTimer* timer;
     QElapsedTimer time;
-    QString WayTo;
+    QString wayTo;
 
     void keyPressEvent(QKeyEvent *e);
     bool eventFilter(QObject *obj,QEvent *event);
-    void change_photo(QString filename);
+    void changePhoto(QString filename);
 
     FRIEND_TEST(Form,SettertGetters);//this test if friend for this class
     FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class

@@ -7,7 +7,7 @@
     Purpose: idescription of class Game functions
     (logic (brain) game)
     @author Mariia Kushnirenko
-    @version 08/12/18
+    @version 22/04/19
 */
 
 
@@ -27,10 +27,10 @@ class Game : public QWidget
 public:
     Game(QString s, int width, QWidget* parent = nullptr);
     void createButton(QPushButton*, int, int, int);
-    void ChangePhoto(QString s);
-    void rewrite_score_file(QString filename);
+    void changePhoto(QString s);
+    void rewriteScoreFile(QString filename);
 
-    void click_button(int button_key);
+    void clickButton(int button_key);
     QString FileDir;
     int countMoves=0;
 
@@ -46,7 +46,7 @@ private:
     QPoint path;//empty cell
     QPixmap **px;//for showing images on screen
     void checkGameOver();
-    QString get_filename();
+    QString getFilename();
     FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class
     FRIEND_TEST(Form,MoveCells);//this test if friend for this class
 public slots:

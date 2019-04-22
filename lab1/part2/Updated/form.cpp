@@ -4,7 +4,7 @@
     Purpose: implementation of class Form functions
     (for box with a gaming field)
     @author Mariia Kushnirenko
-    @version 08/1218
+    @version 22/04/19
 */
 
 #include "form.h"
@@ -56,16 +56,11 @@ Form::Form(bool HardMode, int width, QWidget *parent):
     {
         dir.mkdir("autumn"+QString::number(width));
     }
-    WayTo=dir.absolutePath()+"/";
-    change_photo(WayTo.left(WayTo.left(WayTo.length()-1).lastIndexOf('/')+1)+"autumn.png");
-
-
+    wayTo=dir.absolutePath()+"/";
+    changePhoto(wayTo.left(wayTo.left(wayTo.length()-1).lastIndexOf('/')+1)+"autumn.png");
 
     //fixing the size of the field
-    //this->setFixedSize(this->size());
-
-
-
+    this->setFixedSize(this->size());
 
     setLayout(layout);
 }
@@ -83,18 +78,19 @@ Form::~Form()
     @param -
     @return -
 */
-void Form::update_count_of_moves()
+void Form::updateCountOfMoves()
 {
     ui->countMoves->setText(QString::number(game->countMoves)+" moves");
     if (game->countMoves==1)time.start();
 }
 
-void Form::set_focus()
-{
-    this->setFocus();
-}
+/*
+    Stopwatch to display game time
 
-void Form::set_time()
+    @param -
+    @return -
+*/
+void Form::setTime()
 {
     if (!time.isValid()) return;
     QTime t(0,0);
@@ -102,7 +98,12 @@ void Form::set_time()
     ui->countTime->setText("Time: "+t.toString());
 }
 
+/*
+    To get game time
 
+    @param -
+    @return QTime (time of making a puzzle)
+*/
 QTime Form::getTime()
 {
     QTime t(0,0);
@@ -111,14 +112,24 @@ QTime Form::getTime()
     return t;
 }
 
+/*
+    To get level game
+
+    @param -
+    @return QString (game level)
+*/
 QString Form::getHard()
 {
     if (hardMode)return "hard";
     else return "nohard";
 }
 
+/*
+    to control the arrows for moving on keyes
 
-//copy text from network. I dont understad how it work
+    @param QObject and QEvent
+    @return bool
+*/
 bool Form::eventFilter(QObject *obj,QEvent *event)
 {
     QKeyEvent *keyEvent = nullptr;//event data, if this is a keystroke event
@@ -145,19 +156,23 @@ bool Form::eventFilter(QObject *obj,QEvent *event)
     return result;
 }
 
-//eventFilter
+/*
+    timer recall, at the end of the game
 
-void Form::vin_game()
+    @param -
+    @return -
+*/
+void Form::winGame()
 {
-    disconnect(this->timer, SIGNAL(timeout()), this, SLOT(set_time()));
+    disconnect(this->timer, SIGNAL(timeout()), this, SLOT(setTime()));
 }
 
 void Form::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key()==Qt::Key_Left)game->click_button(Qt::Key_Left);
-    if(e->key()==Qt::Key_Right)game->click_button(Qt::Key_Right);
-    if(e->key()==Qt::Key_Up)game->click_button(Qt::Key_Up);
-    if(e->key()==Qt::Key_Down)game->click_button(Qt::Key_Down);
+    if(e->key()==Qt::Key_Left)game->clickButton(Qt::Key_Left);
+    if(e->key()==Qt::Key_Right)game->clickButton(Qt::Key_Right);
+    if(e->key()==Qt::Key_Up)game->clickButton(Qt::Key_Up);
+    if(e->key()==Qt::Key_Down)game->clickButton(Qt::Key_Down);
 }
 
 /*
@@ -183,12 +198,12 @@ void Form::on_NewGame_clicked()
     }
 
     //draw a new field
-    game = new Game(WayTo, width, this);
+    game = new Game(wayTo, width, this);
     qDebug()<<4;
     this->setFocus();
-    connect(game, SIGNAL(Smove()), this, SLOT(update_count_of_moves()));
-    connect(game, SIGNAL(click()), this, SLOT(set_focus()));
-    update_count_of_moves();
+    connect(game, SIGNAL(Smove()), this, SLOT(updateCountOfMoves()));
+    connect(game, SIGNAL(click()), this, SLOT(setFocus()));
+    updateCountOfMoves();
 
 
     photoLayout->addWidget(game);
@@ -197,7 +212,7 @@ void Form::on_NewGame_clicked()
     //installing a hint (original photo) for easy mode
     if (!hardMode)
     {
-        QPixmap img(WayTo+"0.jpg");
+        QPixmap img(wayTo+"0.jpg");
 
         img=img.scaled(600,600);
         ui->originalPhoto->setPixmap(img);
@@ -211,7 +226,7 @@ void Form::on_NewGame_clicked()
     counter->addWidget(ui->countMoves);
     counter->addWidget(ui->countTime);
     ui->countTime->setText("Time: 00:00:00");
-    connect(this->timer, SIGNAL(timeout()), this, SLOT(set_time()));
+    connect(this->timer, SIGNAL(timeout()), this, SLOT(setTime()));
     layout->addLayout(counter);
     layout->update();
 
@@ -252,11 +267,16 @@ void Form::on_CnangePhoto_clicked()
     QString FileName =QFileDialog::getOpenFileName(this, tr("Open File"),dir.absolutePath(),"*.png");
     if (FileName.isEmpty())return;
 
-    change_photo(FileName);
-
+    changePhoto(FileName);
 }
 
-void Form::change_photo(QString FileName)
+/*
+    break a picture for a puzzle
+
+    @param QString
+    @return -
+*/
+void Form::changePhoto(QString FileName)
 {
     QImage* original=new QImage(FileName);
 
@@ -276,11 +296,11 @@ void Form::change_photo(QString FileName)
     {
         dir.mkdir(FileName+QString::number(width));
     }
-    WayTo=dir.absolutePath()+"/";
+    wayTo=dir.absolutePath()+"/";
 
-    qDebug()<<WayTo;
+    qDebug()<<wayTo;
 
-    SquareImage->save(WayTo+"0.jpg");
+    SquareImage->save(wayTo+"0.jpg");
     int LSSize=min/width;//LittleSquareSize
 
     int count_squares=width*width;
@@ -289,7 +309,7 @@ void Form::change_photo(QString FileName)
     {
         QImage* LittleSquare=new QImage;
         *LittleSquare=SquareImage->copy(((i-1)%width)*LSSize, (i-1)/width*LSSize, LSSize, LSSize);
-        LittleSquare->save(WayTo+QString::number(i)+".jpg");
+        LittleSquare->save(wayTo+QString::number(i)+".jpg");
     }
     on_NewGame_clicked();
 }

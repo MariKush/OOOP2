@@ -1,6 +1,17 @@
 #ifndef HISTORY_H
 #define HISTORY_H
 
+/*
+    K-28
+    history.h
+    Purpose: idescription of class History functions
+    (class for visualization save history)
+    @author Mariia Kushnirenko
+    @version 22/04/19
+*/
+
+
+
 #include <QDialog>
 
 namespace Ui {

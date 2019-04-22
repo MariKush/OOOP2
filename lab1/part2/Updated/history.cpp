@@ -1,3 +1,13 @@
+/*
+    K-28
+    Game.cpp
+    Purpose: implementation of class History functions
+    (class for visualization save history)
+    @author Mariia Kushnirenko
+    @version 22/04/19
+*/
+
+
 #include "history.h"
 #include "ui_history.h"
 #include <QFile>

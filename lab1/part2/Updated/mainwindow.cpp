@@ -4,7 +4,7 @@
     Purpose: implementation of class MainWindow functions
     (initial game window)
     @author Mariia Kushnirenko
-    @version 08/1218
+    @version 22/04/19
 */
 
 #include "mainwindow.h"

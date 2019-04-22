@@ -4,7 +4,7 @@
     Purpose: implementation of class Game functions
     (logic (brain) game)
     @author Mariia Kushnirenko
-    @version 08/1218
+    @version 22/04/19
 */
 
 #include "Game.h"
@@ -42,7 +42,7 @@ Game::Game(QString s, int width, QWidget* parent)
     int count_btns=width*width-1;
     // pictures
     px=new QPixmap*[count_btns];
-    ChangePhoto(s);
+    changePhoto(s);
     int n;
 
     do
@@ -119,10 +119,13 @@ void Game::createButton(QPushButton* b, int nom, int x, int y) // Create a butto
     grid->addWidget(btn, y, x);
 }
 
-
-void Game::click_button(int button_key)
+/*
+    handling of key presses
+    @param cell key (int)
+    @return -
+*/
+void Game::clickButton(int button_key)
 {
-    qDebug()<<path;
     QPoint new_path(path);
 
     switch (button_key) {
@@ -146,14 +149,12 @@ void Game::click_button(int button_key)
         if (new_path.x()==-1)return;
         break;
     }
-    default: qDebug()<<"bag"; exit(1488);
     }
-    qDebug()<<new_path;
     static_cast<QPushButton*>(grid->itemAtPosition(new_path.y(), new_path.x())->widget())->click();
 }
 
 /*
-    For move cells
+    For move cells by mouse
     @param -
     @return -
 */
@@ -212,12 +213,12 @@ void Game::checkGameOver()
         for(QList<QPushButton*>::const_iterator it = buttons.begin(); it != buttons.end(); ++it)
             (*it)->setDisabled(true);
 
-        static_cast<Form*>(parent())->vin_game();
+        static_cast<Form*>(parent())->winGame();
 
         QMessageBox::information(this, "message", "THE VICTORY!!!");
 
-        QString filename=get_filename();
-        rewrite_score_file(filename);
+        QString filename=getFilename();
+        rewriteScoreFile(filename);
 
         History *h=new History(filename);
         h->show();
@@ -226,7 +227,12 @@ void Game::checkGameOver()
     }
 }
 
-QString Game::get_filename()
+/*
+    make filename
+    @param -
+    @return QString text file
+*/
+QString Game::getFilename()
 {
     QString filename="filename";
     filename+=static_cast<Form*>(parent())->getHard();
@@ -237,10 +243,10 @@ QString Game::get_filename()
 /*
     Change 15 photos for eltment class QPixmap
 
-    @param QString - fileName
+    @param QString fileName
     @return -
 */
-void Game::ChangePhoto(QString s)
+void Game::changePhoto(QString s)
 {
     int count=width*width-1;
     for(int i=0;i<count;i++)
@@ -249,12 +255,17 @@ void Game::ChangePhoto(QString s)
     }
 }
 
-void Game::rewrite_score_file(QString filename)
+/*
+    apdate history (if you are in top 5)
+    @param QString fileName
+    @return -
+*/
+void Game::rewriteScoreFile(QString filename)
 {
     int deleted_row=-1;
     int min_count=countMoves;
     QFile f1(filename);
-    bool b=false;
+    bool b=false;//
     if (!f1.open(QFile::ReadWrite))//file dont exist
     {
         b=true;
@@ -275,7 +286,6 @@ void Game::rewrite_score_file(QString filename)
             int count_moves;
 
             count_moves=arr.right(arr.length()-10-8).left(arr.length()-10-8-2).toInt();
-            qDebug()<<count_moves;
             if (min_count<count_moves)
             {
                 min_count=count_moves;
