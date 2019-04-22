@@ -265,10 +265,10 @@ void Game::rewriteScoreFile(QString filename)
     int deleted_row=-1;
     int min_count=countMoves;
     QFile f1(filename);
-    bool b=false;//
-    if (!f1.open(QFile::ReadWrite))//file dont exist
+    bool need_rewrite=false;
+    if (!f1.open(QFile::ReadWrite))//file don't exist
     {
-        b=true;
+        need_rewrite=true;
     }
     else
     {
@@ -279,7 +279,7 @@ void Game::rewriteScoreFile(QString filename)
             if (arr.isEmpty())
             {
                 deleted_row=-1;
-                b=true;
+                need_rewrite=true;
                 var=5;
                 continue;
             }
@@ -290,7 +290,7 @@ void Game::rewriteScoreFile(QString filename)
             {
                 min_count=count_moves;
                 deleted_row=var;
-                b=true;
+                need_rewrite=true;
             }
             arr.clear();
         }
@@ -300,7 +300,7 @@ void Game::rewriteScoreFile(QString filename)
 
     bool ok;
     QString text;
-    if (b)
+    if (need_rewrite)
     {
         do{
 
