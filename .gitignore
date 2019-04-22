@@ -443,9 +443,7 @@ tmp/
 .vpprefdata
 
 #project photos
-pictures/
-!autumn*/
-!autumn.png
+*.jpg
 
 
 
