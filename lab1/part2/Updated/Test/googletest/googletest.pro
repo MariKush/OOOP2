@@ -2,7 +2,6 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-
 CONFIG+=console c++14
 
 
@@ -19,17 +18,18 @@ SOURCES += \
     googlemock/src/gmock-all.cc \
     ../../form.cpp \
     ../../Game.cpp \
-    ../../main.cpp \
+    ../../history.cpp \
     ../../mainwindow.cpp
-
-SUBDIRS += \
-    ../../Project.pro
 
 FORMS += \
     ../../form.ui \
+    ../../history.ui \
     ../../mainwindow.ui
 
 HEADERS += \
     ../../form.h \
     ../../Game.h \
+    ../../history.h \
     ../../mainwindow.h
+
+

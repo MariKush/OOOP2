@@ -63,6 +63,9 @@ Form::Form(bool HardMode, int width, QWidget *parent):
     this->setFixedSize(this->size());
 
     setLayout(layout);
+
+    QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+    QCoreApplication::postEvent(this, event);
 }
 
 
@@ -156,6 +159,14 @@ bool Form::eventFilter(QObject *obj,QEvent *event)
     return result;
 }
 
+void Form::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key()==Qt::Key_Left)game->clickButton(Qt::Key_Left);
+    if(e->key()==Qt::Key_Right)game->clickButton(Qt::Key_Right);
+    if(e->key()==Qt::Key_Up)game->clickButton(Qt::Key_Up);
+    if(e->key()==Qt::Key_Down)game->clickButton(Qt::Key_Down);
+}
+
 /*
     timer recall, at the end of the game
 
@@ -165,14 +176,6 @@ bool Form::eventFilter(QObject *obj,QEvent *event)
 void Form::winGame()
 {
     disconnect(this->timer, SIGNAL(timeout()), this, SLOT(setTime()));
-}
-
-void Form::keyPressEvent(QKeyEvent *e)
-{
-    if(e->key()==Qt::Key_Left)game->clickButton(Qt::Key_Left);
-    if(e->key()==Qt::Key_Right)game->clickButton(Qt::Key_Right);
-    if(e->key()==Qt::Key_Up)game->clickButton(Qt::Key_Up);
-    if(e->key()==Qt::Key_Down)game->clickButton(Qt::Key_Down);
 }
 
 /*
@@ -199,7 +202,6 @@ void Form::on_NewGame_clicked()
 
     //draw a new field
     game = new Game(wayTo, width, this);
-    qDebug()<<4;
     this->setFocus();
     connect(game, SIGNAL(Smove()), this, SLOT(updateCountOfMoves()));
     connect(game, SIGNAL(click()), this, SLOT(setFocus()));
@@ -298,7 +300,6 @@ void Form::changePhoto(QString FileName)
     }
     wayTo=dir.absolutePath()+"/";
 
-    qDebug()<<wayTo;
 
     SquareImage->save(wayTo+"0.jpg");
     int LSSize=min/width;//LittleSquareSize

@@ -10,8 +10,6 @@
     @version 22/04/19
 */
 
-
-
 #include <QDialog>
 
 namespace Ui {

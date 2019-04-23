@@ -47,8 +47,12 @@ private:
     QPixmap **px;//for showing images on screen
     void checkGameOver();
     QString getFilename();
-    FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class
-    FRIEND_TEST(Form,MoveCells);//this test if friend for this class
+
+    //this tests is friend for this class
+    FRIEND_TEST(Form,CanBeSolve);
+    FRIEND_TEST(Form,MoveCells);
+    FRIEND_TEST(Form,ChangePhoto);
+    FRIEND_TEST(Form,KeyClickEvent);
 public slots:
     void move();
 };

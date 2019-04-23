@@ -64,9 +64,12 @@ private:
     bool eventFilter(QObject *obj,QEvent *event);
     void changePhoto(QString filename);
 
-    FRIEND_TEST(Form,SettertGetters);//this test if friend for this class
-    FRIEND_TEST(Form,CanBeSolve);//this test if friend for this class
-    FRIEND_TEST(Form,MoveCells);//this test if friend for this class
+    //this tests is friend for this class
+    FRIEND_TEST(Form,SettertGetters);
+    FRIEND_TEST(Form,CanBeSolve);
+    FRIEND_TEST(Form,MoveCells);
+    FRIEND_TEST(Form,ChangePhoto);
+    FRIEND_TEST(Form,KeyClickEvent);
 };
 
 #endif // FORM_H

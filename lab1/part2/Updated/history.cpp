@@ -15,7 +15,6 @@
 #include <QDebug>
 #include <QTime>
 
-const QString wayTo="filename.txt";
 
 History::History(QString filename, QWidget *parent) :
     QDialog(parent),
@@ -57,7 +56,7 @@ void History::set_text(QString filename)
 void History::swap_raw(int r1, int r2)
 {
     for (int i=0;i<3;i++)
-    {//swap(ui->tableWidget->item(r1, i), ui->tableWidget->item(r2, i))
+    {
         QString txt=ui->tableWidget->item(r1, i)->text();
         ui->tableWidget->item(r1, i)->setText(ui->tableWidget->item(r2, i)->text());
         ui->tableWidget->item(r2, i)->setText(txt);

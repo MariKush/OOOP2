@@ -19,6 +19,7 @@
 #include <QFile>
 #include <QInputDialog>
 
+#include <QApplication>
 /*
     Constructor class Game
     @param QString s
@@ -92,6 +93,7 @@ Game::Game(QString s, int width, QWidget* parent)
             createButton(nullptr, numbers[n++], x, y);
         }
     setLayout(grid);
+
 }
 
 
@@ -127,28 +129,27 @@ void Game::createButton(QPushButton* b, int nom, int x, int y) // Create a butto
 void Game::clickButton(int button_key)
 {
     QPoint new_path(path);
-
     switch (button_key) {
-    case Qt::Key_Up: {
-        new_path.setY(new_path.y()+1);
-        if(new_path.y()==width)return;
-        break;
-    }
-    case Qt::Key_Down: {
-        new_path.setY(new_path.y()-1);
-        if(new_path.y()==-1)return;
-        break;
-    }
-    case Qt::Key_Left: {
-        new_path.setX(new_path.x()+1);
-        if (new_path.x()==width)return;
-        break;
-    }
-    case Qt::Key_Right:{
-        new_path.setX(new_path.x()-1);
-        if (new_path.x()==-1)return;
-        break;
-    }
+        case Qt::Key_Up: {
+            new_path.setY(new_path.y()+1);
+            if(new_path.y()==width)return;
+            break;
+        }
+        case Qt::Key_Down: {
+            new_path.setY(new_path.y()-1);
+            if(new_path.y()==-1)return;
+            break;
+        }
+        case Qt::Key_Left: {
+            new_path.setX(new_path.x()+1);
+            if (new_path.x()==width)return;
+            break;
+        }
+        case Qt::Key_Right:{
+            new_path.setX(new_path.x()-1);
+            if (new_path.x()==-1)return;
+            break;
+        }
     }
     static_cast<QPushButton*>(grid->itemAtPosition(new_path.y(), new_path.x())->widget())->click();
 }
@@ -200,7 +201,7 @@ void Game::checkGameOver()
             if(grid->itemAtPosition(y, x) == nullptr)
                 continue;
             n = numbers.indexOf(i++);
-            if(buttons[n] != (QPushButton*)grid->itemAtPosition(y, x)->widget())
+            if(buttons[n] != static_cast<QPushButton*>(grid->itemAtPosition(y, x)->widget()))
                 return;
         }
     }
@@ -275,7 +276,6 @@ void Game::rewriteScoreFile(QString filename)
         QByteArray arr;
         for (int var = 0; var < 5; var++) {
             arr=f1.readLine();
-            qDebug()<<arr;
             if (arr.isEmpty())
             {
                 deleted_row=-1;
@@ -318,10 +318,8 @@ void Game::rewriteScoreFile(QString filename)
             while (f1.getChar(char())) {}
             QByteArray put=text.toLatin1();
             put+=static_cast<Form*>(parent())->getTime().toString();
-            qDebug()<<static_cast<Form*>(parent())->getTime();
             put+=QString::number(countMoves).toLatin1();
             put+="\r\n";
-            qDebug()<<put;
             f1.write(put);
         }
         else
@@ -339,7 +337,6 @@ void Game::rewriteScoreFile(QString filename)
                      put+=static_cast<Form*>(parent())->getTime().toString();
                      put+=QString::number(countMoves).toLatin1();
                      put+="\r\n";
-                     qDebug()<<put;
                      f2.write(put);
                  }
                  else {
