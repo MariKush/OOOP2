@@ -318,6 +318,7 @@ void Game::rewriteScoreFile(QString filename)
 
         f1.open(QFile::ReadWrite);
 
+        //if top 5 is not full (insert rezult as a last member)
         if (deleted_row==-1)
         {
             while (f1.getChar(char())) {}
@@ -327,6 +328,7 @@ void Game::rewriteScoreFile(QString filename)
             put+="\r\n";
             f1.write(put);
         }
+        //if top 5 is full (revrite file)
         else
         {
             QString tmp="tmp.tmp";
