@@ -27,24 +27,17 @@ class Form : public QWidget
     Q_OBJECT
 
 public:
-
-    explicit Form(bool HardMode=true, int width=4, QWidget *parent = nullptr);
+    explicit Form(bool HardMode=true, int width=4, QWidget *parent = nullptr);//nonconverting constructor
     QTime getTime();
     QString getHard();
     void winGame();
     ~Form();
-public slots:
-
 
 private slots:
     void on_NewGame_clicked();
-
     void on_ExitGame_clicked();
-
     void on_CnangePhoto_clicked();
-
     void updateCountOfMoves();
-
     void setTime();
 
 private:

@@ -45,6 +45,7 @@ private:
     QGridLayout* grid;
     QPoint path;//empty cell
     QPixmap **px;//for showing images on screen
+
     void checkGameOver();
     QString getFilename();
 
