@@ -272,11 +272,12 @@ void Game::rewriteScoreFile(QString filename)
     {
         need_rewrite=true;
     }
-    else
+    else//file exist
     {
         QByteArray arr;
         for (int var = 0; var < 5; var++) {
             arr=f1.readLine();
+            //if file is not full
             if (arr.isEmpty())
             {
                 deleted_row=-1;
@@ -287,6 +288,7 @@ void Game::rewriteScoreFile(QString filename)
             int count_moves;
 
             count_moves=arr.right(arr.length()-10-8).left(arr.length()-10-8-2).toInt();
+            //check if you need to include in top 5 by count moves
             if (min_count<count_moves)
             {
                 min_count=count_moves;
@@ -299,20 +301,22 @@ void Game::rewriteScoreFile(QString filename)
     }
     f1.close();
 
-    bool ok;
+    bool ok;//field is normally filled
     QString text;
     if (need_rewrite)
     {
+        //if nessesary open input dialog to enter user name
         do{
-
             text= QInputDialog::getText(this, tr("QInputDialog::getText()"),
                                                      tr("User name:"),QLineEdit::Normal,
                                                      QDir::home().dirName(), &ok);
         }while(!ok||text.isEmpty());
+
+        //insert user name
         text=text.left(10);
         while (text.size()<10)text+=" ";
-        f1.open(QFile::ReadWrite);
 
+        f1.open(QFile::ReadWrite);
 
         if (deleted_row==-1)
         {
@@ -325,7 +329,6 @@ void Game::rewriteScoreFile(QString filename)
         }
         else
         {
-
             QString tmp="tmp.tmp";
             QFile f2(tmp);
             f2.open(QFile::WriteOnly);

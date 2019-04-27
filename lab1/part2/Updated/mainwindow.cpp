@@ -50,7 +50,6 @@ void MainWindow::on_pushButton_history_clicked()
     if (ui->HardMode->isChecked())filename+="hard";
     else filename+="nohard";
     filename+=QString::number(ui->width_spinbox->value());
-    qDebug()<<filename;
     History *h=new History(filename+".txt");
     h->show();
 }

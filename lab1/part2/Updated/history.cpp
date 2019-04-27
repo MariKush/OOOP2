@@ -12,7 +12,6 @@
 #include "ui_history.h"
 #include <QFile>
 #include <QTableWidgetItem>
-#include <QDebug>
 #include <QTime>
 
 /*
