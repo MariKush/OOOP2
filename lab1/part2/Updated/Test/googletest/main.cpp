@@ -11,8 +11,7 @@
 
 TEST(Form, SettertGetters) {
   Form f;
-  EXPECT_TRUE(f);
-  EXPECT_TRUE(f.game);//<<"not create game in form";
+  EXPECT_TRUE(f.game)<<"not create game in form";
   EXPECT_EQ(f.game->countMoves, 0)<<"count moves not equel 0";
 
 }
@@ -47,16 +46,16 @@ TEST(Form,MoveCells){
         {
             int countMoves = f.game->countMoves;
             clickedBtn->click();
-            EXPECT_EQ(f.game->path,QPoint(x,y));
-            EXPECT_EQ(countMoves+1,f.game->countMoves);
+            EXPECT_EQ(f.game->path,QPoint(x,y)) <<"path is not correct";
+            EXPECT_EQ(countMoves+1,f.game->countMoves) <<"count moves is not correct(if move)";
         }
         else
         {
             int countMoves = f.game->countMoves;
             QPoint qp(f.game->path);
             clickedBtn->click();
-            EXPECT_EQ(f.game->path,qp);
-            EXPECT_EQ(countMoves,f.game->countMoves);
+            EXPECT_EQ(f.game->path,qp)<<"path is not correct";
+            EXPECT_EQ(countMoves,f.game->countMoves)<<"count moves is not correct(if do not move)";
         }
     }
 
@@ -75,7 +74,7 @@ TEST(Form, ChangePhoto){
         f.changePhoto(dir.path()+"/board.png");
         dir=QDir::current();
         dir.cdUp();
-        EXPECT_TRUE(dir.cd("board"+QString::number(f.width)));
+        EXPECT_TRUE(dir.cd("board"+QString::number(f.width)))<<"don't create file for change photo";
     }
 
 }
@@ -111,14 +110,14 @@ TEST(Form, KeyClickEvent)
             }
 
             f.keyPressEvent(event);
-            EXPECT_EQ(f.game->path,path);
-            EXPECT_EQ(countMoves+1,f.game->countMoves);
+            EXPECT_EQ(f.game->path,path)<<"path is not correct";
+            EXPECT_EQ(countMoves+1,f.game->countMoves)<<"count moves is not correct(if do move)";
         }
         else{
 
             f.keyPressEvent(event);
-            EXPECT_EQ(f.game->path,path);
-            EXPECT_EQ(countMoves,f.game->countMoves);
+            EXPECT_EQ(f.game->path,path)<<"path is not correct";
+            EXPECT_EQ(countMoves,f.game->countMoves)<<"count moves is not correct(if do not move)";
         }
 
     }

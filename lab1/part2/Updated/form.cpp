@@ -47,7 +47,6 @@ Form::Form(bool HardMode, int width, QWidget *parent):
     timer=new QTimer;
     timer->start(100);
 
-
     //set the default image
     QDir dir=QDir::current();
     dir.cdUp();
@@ -63,9 +62,6 @@ Form::Form(bool HardMode, int width, QWidget *parent):
     this->setFixedSize(this->size());
 
     setLayout(layout);
-
-    QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
-    QCoreApplication::postEvent(this, event);
 }
 
 
@@ -76,7 +72,7 @@ Form::~Form()
 
 
 /*
-    Updating the number of moves
+    Updating the number of moves and start time count after first move
 
     @param -
     @return -
@@ -88,7 +84,7 @@ void Form::updateCountOfMoves()
 }
 
 /*
-    Stopwatch to display game time
+    For regular updates of the time spent
 
     @param -
     @return -
@@ -128,7 +124,7 @@ QString Form::getHard()
 }
 
 /*
-    to control the arrows for moving on keyes
+    to handle the keystroke event
 
     @param QObject and QEvent
     @return bool
@@ -159,6 +155,12 @@ bool Form::eventFilter(QObject *obj,QEvent *event)
     return result;
 }
 
+/*
+    for press on buttons (сalling the method for the game)
+
+    @param QKeyEvent *e
+    @return -
+*/
 void Form::keyPressEvent(QKeyEvent *e)
 {
     if(e->key()==Qt::Key_Left)game->clickButton(Qt::Key_Left);
@@ -196,7 +198,6 @@ void Form::on_NewGame_clicked()
         layout->removeItem(counter);
         layout->removeItem(photoLayout);
 
-
         delete game;
     }
 
@@ -207,9 +208,7 @@ void Form::on_NewGame_clicked()
     connect(game, SIGNAL(click()), this, SLOT(setFocus()));
     updateCountOfMoves();
 
-
     photoLayout->addWidget(game);
-
 
     //installing a hint (original photo) for easy mode
     if (!hardMode)

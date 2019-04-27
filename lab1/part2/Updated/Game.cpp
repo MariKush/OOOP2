@@ -18,8 +18,8 @@
 #include <QDir>
 #include <QFile>
 #include <QInputDialog>
-
 #include <QApplication>
+
 /*
     Constructor class Game
     @param QString s
@@ -255,6 +255,7 @@ void Game::changePhoto(QString s)
         px[i]=new QPixmap(s+QString::number(i+1)+".jpg");
     }
 }
+
 
 /*
     apdate history (if you are in top 5)
