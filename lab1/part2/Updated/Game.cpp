@@ -215,11 +215,12 @@ void Game::checkGameOver()
             (*it)->setDisabled(true);
 
         static_cast<Form*>(parent())->winGame();
+        QString get_time_str = static_cast<Form*>(parent())->getTime().toString();
 
         QMessageBox::information(this, "message", "THE VICTORY!!!");
 
         QString filename=getFilename();
-        rewriteScoreFile(filename);
+        rewriteScoreFile(filename, get_time_str);
 
         History *h=new History(filename);
         h->show();
@@ -262,7 +263,7 @@ void Game::changePhoto(QString s)
     @param QString fileName
     @return -
 */
-void Game::rewriteScoreFile(QString filename)
+void Game::rewriteScoreFile(QString filename, QString get_time_str)
 {
     int deleted_row=-1;
     int min_count=countMoves;
@@ -323,7 +324,7 @@ void Game::rewriteScoreFile(QString filename)
         {
             while (f1.getChar(char())) {}
             QByteArray put=text.toLatin1();
-            put+=static_cast<Form*>(parent())->getTime().toString();
+            put+=get_time_str;
             put+=QString::number(countMoves).toLatin1();
             put+="\r\n";
             f1.write(put);
@@ -340,7 +341,7 @@ void Game::rewriteScoreFile(QString filename)
                  if (i==deleted_row)
                  {
                      put=text.toLatin1();
-                     put+=static_cast<Form*>(parent())->getTime().toString();
+                     put+=get_time_str;
                      put+=QString::number(countMoves).toLatin1();
                      put+="\r\n";
                      f2.write(put);
@@ -357,8 +358,3 @@ void Game::rewriteScoreFile(QString filename)
         }
     }
 }
-
-
-
-
-

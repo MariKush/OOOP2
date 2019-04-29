@@ -28,7 +28,7 @@ public:
     Game(QString s, int width, QWidget* parent = nullptr);
     void createButton(QPushButton*, int, int, int);
     void changePhoto(QString s);
-    void rewriteScoreFile(QString filename);
+    void rewriteScoreFile(QString filename, QString get_time_str);
 
     void clickButton(int button_key);
     QString FileDir;
